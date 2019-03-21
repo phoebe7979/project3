@@ -97,30 +97,23 @@ def new_movie(title, director, genre):
     if Movie.query.filter_by(title=title).first(): # if there is a song by that title
         return "That movie already exists! Add another movie."
     else:
-        artist = get_or_create_artist(artist)
-        movie = Movie(title=title, director_id=director.id,genre=genre)
-        session.add(song)
+        director = get_or_create_director(director)
+        genre = get_or_create_genre(genre)
+        movie = Movie(title=title, director_id=director.id,genre_id=genre.id)
+        session.add(movie)
         session.commit()
-        return "New song: {} by {}. Check out the URL for ALL songs to see the whole list.".format(song.title, artist.name)
+        return "New movie: {} by {}.".format(movie.title, director.name)
 
-@app.route('/all_songs')
-def see_all():
-    all_songs = [] # Will be be tuple list of title, genre
-    songs = Song.query.all()
-    for s in songs:
-        artist = Artist.query.filter_by(id=s.artist_id).first() # get just one artist instance
-        all_songs.append((s.title,artist.name, s.genre)) # get list of songs with info to easily access [not the only way to do this]
-    return render_template('all_songs.html',all_songs=all_songs) # check out template to see what it's doing with what we're sending!
 
-@app.route('/all_artists')
-def see_all_artists():
-    artists = Artist.query.all()
+@app.route('/all_directors')
+def see_all_directors():
+    directors = Director.query.all()
     names = []
-    for a in artists:
-        num_songs = len(Song.query.filter_by(artist_id=a.id).all())
-        newtup = (a.name,num_songs)
+    for a in directors:
+        num_movies = len(Movie.query.filter_by(director_id=a.id).all())
+        newtup = (a.name,num_movies)
         names.append(newtup) # names will be a list of tuples
-    return render_template('all_artists.html',artist_names=names)
+    return render_template('all_directors.html',director_names=names)
 
 
 if __name__ == '__main__':

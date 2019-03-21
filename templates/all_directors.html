@@ -1,11 +1,11 @@
 <ul>
-{% for nm in artist_names %}
+{% for nm in director_names %}
 <li>{{ nm[0] }}: {%if nm[1] == 1 %} {{ nm[1]}} song {% else %} {{ nm[1] }} songs {% endif %} </li><br>
 {% endfor %}
 </ul>
 
 {% if not artist_names %}
-There are no saved artists to show.
+There are no saved directors to show.
 {% endif %}
 
 
